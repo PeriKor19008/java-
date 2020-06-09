@@ -44,8 +44,19 @@ public class ShoppingCart {
 			throw new NoOptionException("item not found");
 		}
 	}
-	public void changeItemOrderedQuantity(int code,int no) throws NoOptionException{
+	public void changeItemOrderedQuantity(int code,int no) throws NoOptionException , NegativeAmountException{
 		int j=0;
+		if(no<0) {
+			throw new NegativeAmountException("you can not order a negative amount");
+		}
+		if(no==0) {
+			try {
+				removeItemOrederd(code);
+			}
+			catch(NoOptionException e) {
+				System.out.println(e.getMessage());
+			}
+		}
 		int k=0;
 		for (ItemOrdered i:orderList) {
 			j++;
@@ -66,13 +77,16 @@ public class ShoppingCart {
 			throw new NoOptionException("item not found");
 		}
 	}
+	
+	
 	public void showCart(String cat) throws EmptyCartException{
 		if (orderList.size()==0) {
 			throw new EmptyCartException("the cart is empty");
 		}
+		
 		else {
 			for (ItemOrdered i: orderList) {
-				System.out.println(i.item.getname()+" id "+i.item.getid()+"   amount  ("+i.getquantity()+")   price:"+i.getquantity()+"+"+i.item.getprice()+"="+i.getquantity()*i.item.getprice());;
+				System.out.println(i.item.getname()+" id "+i.item.getid()+"   amount  ("+i.getquantity()+")   price:"+i.getquantity()+"*"+i.item.getprice()+"="+i.getquantity()*i.item.getprice());
 			}
 			double tmp=calculateCourierCost(cat)+calculateNet();
 			System.out.println("Overall Price:"+calculateNet()+"\nCourier Cost:"+calculateCourierCost(cat)+"\n"+tmp);
